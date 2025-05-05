@@ -70,18 +70,28 @@ function saveMessage(data) {
 function fetchMessages() {
   fetch(`${apiUrl}/get-messages`)
     .then((response) => response.json())
-    .then((messages) => {
-      attendanceData = messages.map((msg) => ({
-        name: msg.name,
-        timestamp: msg.timestamp,
-        status: "Hadir",
-        course: msg.course || "Tidak ada jadwal",
-      }));
-      messages.forEach((msg) => courses.add(msg.course));
-      updateAttendanceTable();
-      updateDashboard();
+    .then((result) => {
+      if (result.status === "success" && Array.isArray(result.data)) {
+        attendanceData = result.data.map((msg) => ({
+          name: msg.name,
+          timestamp: msg.timestamp,
+          status: msg.status || "Hadir",
+          course: msg.course || "Tidak ada jadwal",
+        }));
+        result.data.forEach((msg) => {
+          if (msg.course) courses.add(msg.course);
+        });
+        updateAttendanceTable();
+        updateDashboard();
+        logMessage(`Data berhasil dimuat: ${result.count} records`);
+      } else {
+        throw new Error("Format data tidak valid");
+      }
     })
-    .catch((error) => logMessage(`Error mengambil data: ${error}`));
+    .catch((error) => {
+      logMessage(`Error mengambil data: ${error.message}`);
+      console.error("Error fetching messages:", error);
+    });
 }
 
 function updateAttendanceTable() {
