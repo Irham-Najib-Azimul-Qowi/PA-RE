@@ -2,27 +2,26 @@
 
 **PA-RE (Presensi Absensi Real-Time)** adalah sistem absensi berbasis web yang dirancang untuk memberikan solusi absensi yang efisien, akurat, dan real-time. Sistem ini memanfaatkan **ESP32-CAM** untuk menangkap gambar pengguna saat melakukan presensi, memastikan keamanan dan validitas data. PA-RE sangat cocok untuk berbagai kegiatan seperti lintas alam, pelatihan, acara organisasi, atau lingkungan pendidikan yang membutuhkan pencatatan kehadiran berbasis teknologi.
 
+🌐 **Akses Dashboard IoT**: Kunjungi [https://absensi-lintas-alam-web.vercel.app/](https://absensi-lintas-alam-web.vercel.app/) untuk melihat dashboard absensi real-time yang telah dikembangkan oleh tim kami.
+
 ---
 
 ## 🚀 Fitur Utama
 
 - **Presensi Real-Time**  
-  Pengguna dapat melakukan absensi secara langsung melalui antarmuka web, dengan data yang langsung tersinkronisasi ke server.
+  Pengguna dapat melakukan absensi secara langsung melalui antarmuka web, dengan data yang langsung tersinkronisasi.
 
 - **Integrasi ESP32-CAM**  
   Menggunakan ESP32-CAM untuk menangkap foto pengguna saat absensi, memastikan bahwa presensi dilakukan oleh orang yang tepat.
 
 - **Dashboard Admin Interaktif**  
-  Admin dapat mengelola data presensi, melihat daftar pengguna, dan mengatur jadwal absensi melalui dashboard yang user-friendly.
+  Admin dapat melihat data presensi melalui dashboard yang user-friendly di [https://absensi-lintas-alam-web.vercel.app/](https://absensi-lintas-alam-web.vercel.app/).
 
 - **Jadwal Absensi Otomatis**  
   Sistem mendukung pengaturan jadwal (baik untuk mata kuliah atau individu), yang akan dikirim ke ESP32 melalui protokol MQTT untuk mengontrol waktu absensi.
 
 - **API Terstruktur**  
   Backend menyediakan API yang terorganisir untuk mendukung pengembangan lebih lanjut, seperti integrasi dengan aplikasi lain.
-
-- **Keamanan Data**  
-  Data presensi disimpan di database MySQL dengan koneksi terenkripsi (opsional SSL), dan gambar pengguna diolah secara aman.
 
 - **Deployment Mudah**  
   Konfigurasi proyek kompatibel dengan Vercel untuk deployment frontend yang cepat, sementara backend dapat dijalankan di server lokal atau cloud.
@@ -48,13 +47,11 @@ PA-RE/
 │   ├── mqtt.js              # Klien MQTT untuk komunikasi dengan ESP32
 │   └── chart.min.js         # Library Chart.js untuk visualisasi data
 ├── models/                  # Definisi model data
-│   ├── attendance.py        # Model untuk data absensi
-│   └── schedule.py          # Model untuk jadwal absensi
 ├── public/                  # Aset publik
 │   ├── index.html           # Halaman utama aplikasi web
 │   ├── style.css            # Stylesheet untuk antarmuka
 │   └── script.js            # Logika JavaScript untuk frontend
-├── .env                     # Variabel lingkungan (contoh: kredensial database, secret key)
+├── .env                     # Variabel lingkungan (contoh: secret key)
 ├── ESP32.PY                 # Skrip Python untuk komunikasi dengan ESP32
 ├── SERVER.py                # Server backend utama menggunakan Flask
 ├── requirements.txt         # Daftar dependensi Python
@@ -75,7 +72,6 @@ PA-RE/
 - **Backend**  
   - Python 3.8+ dengan framework Flask
   - Paho MQTT untuk komunikasi dengan ESP32
-  - MySQL untuk penyimpanan data (menggunakan TiDB Cloud)
   - Face Recognition (library Python) untuk deteksi wajah
 
 - **Microcontroller**  
@@ -99,8 +95,7 @@ Sebelum memulai, pastikan Anda memiliki:
 - Python 3.8+ dan pip terinstal
 - Node.js dan npm untuk dependensi frontend
 - Arduino IDE untuk mengunggah kode ke ESP32-CAM
-- Koneksi internet stabil untuk MQTT dan database cloud
-- Akun TiDB Cloud untuk database MySQL (atau gunakan MySQL lokal)
+- Koneksi internet stabil untuk MQTT
 
 ### 1. Kloning Proyek
 Klon repositori ke komputer Anda:
@@ -118,7 +113,6 @@ pip install -r requirements.txt
 Dependensi utama meliputi:
 - `flask`
 - `paho-mqtt`
-- `mysql-connector-python`
 - `face_recognition`
 - `opencv-python`
 
@@ -128,19 +122,12 @@ Buat file `.env` di root direktori proyek dan isi dengan kredensial berikut:
 # Kunci rahasia untuk aplikasi Flask
 SECRET_KEY=your_secret_key_here
 
-# Kredensial database (contoh menggunakan TiDB Cloud)
-DB_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
-DB_PORT=4000
-DB_USER=2v1KcdwiMtttUeh.root
-DB_PASSWORD=2OxplUZ7nTiFxDVa
-DB_NAME=test
-
 # MQTT Broker (opsional, default: broker.emqx.io)
 MQTT_BROKER=broker.emqx.io
 MQTT_PORT=1883
 ```
 
-> **Catatan**: Ganti nilai di atas dengan kredensial Anda sendiri, terutama untuk `DB_USER` dan `DB_PASSWORD`.
+> **Catatan**: Ganti `SECRET_KEY` dengan nilai yang aman.
 
 #### c. Siapkan Folder Dataset
 Buat folder `dataset` untuk menyimpan gambar wajah pengguna:
@@ -211,7 +198,7 @@ npm install
 ```
 
 #### b. Jalankan Frontend Secara Lokal
-Buka file `public/index.html` di browser untuk mengakses antarmuka web. Pastikan server backend (`SERVER.py`) sedang berjalan agar frontend dapat terhubung ke API dan MQTT.
+Buka file `public/index.html` di browser untuk mengakses antarmuka web. Pastikan server backend (`SERVER.py`) sedang berjalan agar frontend dapat terhubung ke API dan MQTT. Alternatifnya, akses dashboard langsung di [https://absensi-lintas-alam-web.vercel.app/](https://absensi-lintas-alam-web.vercel.app/).
 
 ### 6. Deploy ke Vercel (Opsional)
 Jika Anda ingin mendeploy frontend ke Vercel:
@@ -257,7 +244,7 @@ git push origin main
 
 ## 📷 Contoh Antarmuka
 
-Berikut adalah tampilan antarmuka sistem PA-RE:
+Berikut adalah tampilan antarmuka sistem PA-RE, yang dapat diakses di [https://absensi-lintas-alam-web.vercel.app/](https://absensi-lintas-alam-web.vercel.app/):
 
 - **Dashboard Admin**  
   ![Dashboard Admin](public/screenshots/dashboard.png)
@@ -279,28 +266,24 @@ Berikut adalah tampilan antarmuka sistem PA-RE:
    - ESP32 juga menerima jadwal absensi melalui MQTT untuk mengontrol waktu pengambilan gambar.
 
 2. **Backend (SERVER.py)**:
-   - Server Flask menangani API untuk menyimpan data absensi dan jadwal ke database.
+   - Server Flask menangani API untuk memproses data absensi.
    - Menggunakan Face Recognition untuk memverifikasi wajah pengguna dari gambar yang dikirim ESP32-CAM.
    - Mengirimkan notifikasi ke ESP32 (misalnya, membuka pintu) melalui MQTT.
 
 3. **Frontend (index.html)**:
-   - Menampilkan dashboard dengan data absensi, grafik, dan log aktivitas.
+   - Menampilkan dashboard dengan data absensi, grafik, dan log aktivitas di [https://absensi-lintas-alam-web.vercel.app/](https://absensi-lintas-alam-web.vercel.app/).
    - Memungkinkan admin untuk mengatur jadwal dan mengunggah dataset wajah pengguna.
-
-4. **Database**:
-   - Menyimpan data absensi (nama, waktu, status, mata kuliah) dan jadwal (mata kuliah/individu, waktu mulai, waktu selesai).
 
 ---
 
 ## 🛠️ Troubleshooting
 
-### 1. Server Gagal Terhubung ke Database
-- Pastikan kredensial di `.env` sudah benar.
-- Periksa koneksi internet jika menggunakan TiDB Cloud.
-- Log error akan muncul di terminal, misalnya:
+### 1. Server Gagal Memproses Data
+- Periksa log server untuk kesalahan, misalnya:
   ```
-  Gagal menghubungkan ke MySQL: Access denied for user
+  Error pesan MQTT: Connection refused
   ```
+- Pastikan semua dependensi terinstal dengan benar (`pip install -r requirements.txt`).
 
 ### 2. ESP32-CAM Tidak Terhubung ke WiFi
 - Periksa SSID dan password di `config.h`.
